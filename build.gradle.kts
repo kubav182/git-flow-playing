@@ -29,29 +29,28 @@ application {
 }
 
 
-
 val versionPropertyFile = File(projectDir, "version.properties")
 val versionProps = Properties()
 versionProps.load(FileInputStream(versionPropertyFile))
 
 
-fun getMajorVersion() : String {
+fun getMajorVersion(): String {
     return versionProps.getProperty("app.version.major")
 }
 
-fun getMinorVersion() : String {
+fun getMinorVersion(): String {
     return versionProps.getProperty("app.version.minor")
 }
 
-fun getPatchVersion() : String {
+fun getPatchVersion(): String {
     return versionProps.getProperty("app.version.patch")
 }
 
-fun getStageVersion() : String {
+fun getStageVersion(): String {
     return versionProps.getProperty("app.version.stage")
 }
 
-fun getGitBranchType() : GitBranchType {
+fun getGitBranchType(): GitBranchType {
     val currentBranch = getCurrentGitBranch()
     if (currentBranch == null) {
         return GitBranchType.OTHER
@@ -63,15 +62,15 @@ fun getGitBranchType() : GitBranchType {
     return GitBranchType.OTHER
 }
 
-fun getCurrentGitBranch() : String? {
+fun getCurrentGitBranch(): String? {
     return "git rev-parse --abbrev-ref HEAD".runCommand()
 }
 
-fun getGitDiff(branch : String) : String? {
+fun getGitDiff(branch: String): String? {
     return "git log %s.. --oneline".format(branch).runCommand()
 }
 
-enum class GitBranchType (val prefix: String) {
+enum class GitBranchType(val prefix: String) {
     MASTER("master"),
     DEVELOP("develop"),
     RELEASE("release/"),
@@ -105,7 +104,7 @@ fun String.runCommand(): String? {
     }
 }
 
-fun hasUntrackedFiles() : Boolean {
+fun hasUntrackedFiles(): Boolean {
     return "untracked".equals("git diff-index --quiet HEAD -- || echo 'untracked'".runCommand())
 }
 
@@ -113,7 +112,7 @@ fun loadVersionProps() {
     versionProps.load(FileInputStream(versionPropertyFile))
 }
 
-fun changeVersion(scope : VersionScope?, stage: VersionStage) {
+fun changeVersion(scope: VersionScope?, stage: VersionStage) {
     when (scope) {
         VersionScope.MAJOR -> {
             versionProps["app.version.major"] = (versionProps.getProperty("app.version.major").toInt() + 1).toString()
@@ -136,42 +135,42 @@ fun changeVersion(scope : VersionScope?, stage: VersionStage) {
     project.version = currentVersionString()
 }
 
-fun currentVersionString() : String {
+fun currentVersionString(): String {
     return (currentVersionWithoutStage()
             + "." + versionProps.getProperty("app.version.stage"))
 }
 
-fun currentVersionWithoutStage() : String {
+fun currentVersionWithoutStage(): String {
     return (versionProps.getProperty("app.version.major")
             + "." + versionProps.getProperty("app.version.minor")
             + "." + versionProps.getProperty("app.version.patch"))
 }
 
-fun startRelease(scope : VersionScope) {
+fun startRelease(scope: VersionScope) {
     val branchType = getGitBranchType()
     if (branchType != GitBranchType.DEVELOP) {
         if (hasUntrackedFiles()) {
             throw IllegalStateException("Branch has untracked files")
         }
         "git checkout develop".runCommand()
-        if (scope == VersionScope.MAJOR) {
-            changeVersion(VersionScope.MAJOR, VersionStage.RC)
-        } else {
-            changeVersion(null, VersionStage.RC)
-        }
-        "git checkout -b %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-        "git commit -m 'release version %s'".format(currentVersionWithoutStage()).runCommand()
-        "git push".runCommand()
-        "git checkout develop".runCommand()
-        if (scope == VersionScope.MAJOR) {
-            changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
-            changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-        } else {
-            changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-        }
-        "git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
-        "git push".runCommand()
     }
+    if (scope == VersionScope.MAJOR) {
+        changeVersion(VersionScope.MAJOR, VersionStage.RC)
+    } else {
+        changeVersion(null, VersionStage.RC)
+    }
+    "git checkout -b %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
+    "git commit -m 'release version %s'".format(currentVersionWithoutStage()).runCommand()
+    "git push".runCommand()
+    "git checkout develop".runCommand()
+    if (scope == VersionScope.MAJOR) {
+        changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
+        changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
+    } else {
+        changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
+    }
+    "git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
+    "git push".runCommand()
 }
 
 fun finishRelease() {
@@ -202,7 +201,7 @@ fun finishHotfix() {
     }
 }
 
-fun startFeature(featureName : String) {
+fun startFeature(featureName: String) {
     val branchType = getGitBranchType()
     if (branchType != GitBranchType.DEVELOP) {
         if (hasUntrackedFiles()) {
@@ -223,7 +222,6 @@ tasks.register("hello") {
     description = "Produces a greeting"
 
     doLast {
-        changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-        println(hasUntrackedFiles())
+        startRelease(VersionScope.MINOR)
     }
 }
