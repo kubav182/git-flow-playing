@@ -97,8 +97,10 @@ fun String.runCommand(): String? {
                 .start()
 
         proc.waitFor(60, TimeUnit.MINUTES)
-        return proc.inputStream.bufferedReader().readText()
-    } catch (e: java.io.IOException) {
+        val result = proc.inputStream.bufferedReader().readText()
+        println(result)
+        return result
+    } catch (e: IOException) {
         e.printStackTrace()
         return null
     }
