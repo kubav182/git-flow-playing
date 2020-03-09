@@ -162,10 +162,15 @@ fun startRelease(scope: VersionScope) {
         changeVersion(null, VersionStage.RC)
     }
     "git checkout -b %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
+    Thread.sleep(3000)
     "git commit --all -m \"release version %s\"".format(currentVersionWithoutStage()).runCommand()
+    Thread.sleep(3000)
     "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
+    Thread.sleep(3000)
     "git push".runCommand()
+    Thread.sleep(3000)
     "git checkout develop".runCommand()
+    Thread.sleep(3000)
     if (scope == VersionScope.MAJOR) {
         changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
