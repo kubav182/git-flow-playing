@@ -162,7 +162,6 @@ fun startRelease(scope: VersionScope) {
         changeVersion(null, VersionStage.RC)
     }
     "git checkout -b %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    println(getCurrentGitBranch())
     "git commit version.properties -m \"release version %s\"".format(currentVersionWithoutStage()).runCommand()
     "git push".runCommand()
     "git checkout develop".runCommand()
