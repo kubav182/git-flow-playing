@@ -226,6 +226,8 @@ tasks.register("hello") {
     description = "Produces a greeting"
 
     doLast {
-        startRelease(VersionScope.MAJOR)
+        //startRelease(VersionScope.MAJOR)
+        //startRelease(VersionScope.MINOR)
+        startHotfix()
     }
 }
