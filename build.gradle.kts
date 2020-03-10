@@ -169,7 +169,7 @@ fun startRelease(scope: VersionScope) {
     "git push".runCommand()
     "git checkout develop".runCommand()
     if (scope == VersionScope.MAJOR) {
-        changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
+        //changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
     } else {
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
