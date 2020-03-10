@@ -162,25 +162,18 @@ fun startRelease(scope: VersionScope) {
         changeVersion(null, VersionStage.RC)
     }
     "git branch %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    Thread.sleep(3000)
     "git checkout %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    Thread.sleep(3000)
-    "git add version.properties".runCommand()
-    Thread.sleep(3000)
-    "git commit -m 'release version %s'".format(currentVersionWithoutStage()).runCommand()
-    Thread.sleep(3000)
     "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    Thread.sleep(3000)
+    "git add version.properties".runCommand()
+    "git commit -m 'release version %s'".format(currentVersionWithoutStage()).runCommand()
     "git push".runCommand()
-    Thread.sleep(3000)
     //"git checkout develop".runCommand()
-    Thread.sleep(3000)
-    if (scope == VersionScope.MAJOR) {
+    /*if (scope == VersionScope.MAJOR) {
         changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
     } else {
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-    }
+    }*/
     //"git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
     //"git push".runCommand()
 }
