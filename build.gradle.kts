@@ -190,8 +190,9 @@ fun startHotfix() {
         "git checkout master".runCommand()
     }
     changeVersion(VersionScope.PATCH, VersionStage.RC)
-    "git checkout -b %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
-    "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
+    "git branch %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
+    "git checkout %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
+    "git push --set-upstream origin %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
     pushVersionProperties()
 }
 
