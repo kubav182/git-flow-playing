@@ -174,6 +174,7 @@ fun startRelease(scope: VersionScope) {
     } else {
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
     }
+    "git add version.properties".runCommand()
     "git commit -m version.json(%s)".format(currentVersionString()).runCommand()
     "git push".runCommand()
 }
