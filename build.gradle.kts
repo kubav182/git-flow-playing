@@ -150,10 +150,10 @@ fun currentVersionWithoutStage(): String {
 
 fun startRelease(scope: VersionScope) {
     val branchType = getGitBranchType()
+    if (hasUntrackedFiles()) {
+        throw IllegalStateException("Branch has untracked files")
+    }
     if (branchType != GitBranchType.DEVELOP) {
-        if (hasUntrackedFiles()) {
-            throw IllegalStateException("Branch has untracked files")
-        }
         "git checkout develop".runCommand()
     }
     if (scope == VersionScope.MAJOR) {
@@ -164,16 +164,14 @@ fun startRelease(scope: VersionScope) {
     "git branch %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     "git checkout %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    "git add version.properties".runCommand()
-    "git commit -m version.json(%s)".format(currentVersionString()).runCommand()
-    "git push".runCommand()
+    pushVersionProperties()
     "git checkout develop".runCommand()
-    if (scope == VersionScope.MAJOR) {
-        //changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
-        changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-    } else {
-        changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-    }
+
+    changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
+    pushVersionProperties()
+}
+
+fun pushVersionProperties() {
     "git add version.properties".runCommand()
     "git commit -m version.json(%s)".format(currentVersionString()).runCommand()
     "git push".runCommand()
@@ -185,16 +183,16 @@ fun finishRelease() {
 
 fun startHotfix() {
     val branchType = getGitBranchType()
-    if (branchType != GitBranchType.MASTER) {
-        if (hasUntrackedFiles()) {
-            throw IllegalStateException("Branch has untracked files")
-        }
-        "git checkout master".runCommand()
-        changeVersion(VersionScope.PATCH, VersionStage.RC)
-        "git checkout -b %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
-        "git commit -m 'hotfix version %s'".format(currentVersionWithoutStage()).runCommand()
-        "git push".runCommand()
+    if (hasUntrackedFiles()) {
+        throw IllegalStateException("Branch has untracked files")
     }
+    if (branchType != GitBranchType.MASTER) {
+        "git checkout master".runCommand()
+    }
+    changeVersion(VersionScope.PATCH, VersionStage.RC)
+    "git checkout -b %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
+    "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
+    pushVersionProperties()
 }
 
 fun finishHotfix() {
