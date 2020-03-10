@@ -167,7 +167,7 @@ fun startRelease(scope: VersionScope) {
     Thread.sleep(3000)
     "git add version.properties".runCommand()
     Thread.sleep(3000)
-    "git commit -m \"release version %s\"".format(currentVersionWithoutStage()).runCommand()
+    "git commit -m 'release version %s'".format(currentVersionWithoutStage()).runCommand()
     Thread.sleep(3000)
     "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     Thread.sleep(3000)
