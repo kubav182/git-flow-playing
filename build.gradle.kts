@@ -171,7 +171,7 @@ fun startRelease(scope: VersionScope) {
     Thread.sleep(3000)
     "git push".runCommand()
     Thread.sleep(3000)
-    "git checkout develop".runCommand()
+    //"git checkout develop".runCommand()
     Thread.sleep(3000)
     if (scope == VersionScope.MAJOR) {
         changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
@@ -179,8 +179,8 @@ fun startRelease(scope: VersionScope) {
     } else {
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
     }
-    "git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
-    "git push".runCommand()
+    //"git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
+    //"git push".runCommand()
 }
 
 fun finishRelease() {
