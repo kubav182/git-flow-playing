@@ -165,17 +165,17 @@ fun startRelease(scope: VersionScope) {
     "git checkout %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     "git add version.properties".runCommand()
-    "git commit -m %s".format(currentVersionWithoutStage()).runCommand()
+    "git commit -m version.json(%s)".format(currentVersionWithoutStage()).runCommand()
     "git push".runCommand()
-    //"git checkout develop".runCommand()
-    /*if (scope == VersionScope.MAJOR) {
+    "git checkout develop".runCommand()
+    if (scope == VersionScope.MAJOR) {
         changeVersion(VersionScope.MAJOR, VersionStage.SNAPSHOT)
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
     } else {
         changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-    }*/
-    //"git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
-    //"git push".runCommand()
+    }
+    "git commit -m 'develop version %s'".format(currentVersionWithoutStage()).runCommand()
+    "git push".runCommand()
 }
 
 fun finishRelease() {
