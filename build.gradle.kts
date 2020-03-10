@@ -165,7 +165,7 @@ fun startRelease(scope: VersionScope) {
     "git checkout %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
     "git add version.properties".runCommand()
-    "git commit -m 'release version %s'".format(currentVersionWithoutStage()).runCommand()
+    "git commit -m %s".format(currentVersionWithoutStage()).runCommand()
     "git push".runCommand()
     //"git checkout develop".runCommand()
     /*if (scope == VersionScope.MAJOR) {
