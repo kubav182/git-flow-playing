@@ -227,6 +227,7 @@ tasks.register("hello") {
 
     doLast {
         //startRelease(VersionScope.MAJOR)
-        startRelease(VersionScope.MINOR)
+        //startRelease(VersionScope.MINOR)
+        startHotfix()
     }
 }
