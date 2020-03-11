@@ -1,6 +1,19 @@
 import java.util.*
 import java.io.*
 
+buildscript {
+    repositories {
+        // Use jcenter for resolving your dependencies.
+        // You can declare any Maven/Ivy/file repository here.
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath("com.etherealscope:gradle-git-flow-version-plugin:1.0.0.RELEASE")
+    }
+}
+
 plugins {
     // Apply the java plugin to add support for Java
     java
@@ -9,10 +22,17 @@ plugins {
     application
 }
 
+apply(plugin = "com.etherealscope.gradlegitflowversionplugin")
+
+tasks {
+
+}
+
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenLocal()
 }
 
 dependencies {
