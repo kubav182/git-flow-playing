@@ -250,6 +250,6 @@ tasks.register("hello") {
         //startRelease(VersionScope.MAJOR)
         //startRelease(VersionScope.MINOR)
         //startHotfix()
-        println("git diff-index HEAD".runCommand())
+        println("git diff-index HEAD".runCommand().isNullOrEmpty())
     }
 }
