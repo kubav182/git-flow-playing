@@ -249,6 +249,7 @@ tasks.register("hello") {
     doLast {
         //startRelease(VersionScope.MAJOR)
         //startRelease(VersionScope.MINOR)
-        startHotfix()
+        //startHotfix()
+        println("git diff-index HEAD".runCommand())
     }
 }
