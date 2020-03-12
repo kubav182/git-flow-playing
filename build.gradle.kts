@@ -260,6 +260,8 @@ tasks.register("hello") {
         println("git apply crazy.patch --check".runCommand())
         println("4")
         println("rm crazy.patch".runCommand())
+        println("5")
+        println("git checkout develop".runCommand())
 
     }
 }
