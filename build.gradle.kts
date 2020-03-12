@@ -252,9 +252,13 @@ tasks.register("hello") {
         //startHotfix()
         //println("git diff-index HEAD".runCommand().isNullOrEmpty())
 
+        println("1")
         println("git format-patch master --stdout > crazy.patch".runCommand())
+        println("2")
         println("git checkout master".runCommand())
+        println("3")
         println("git apply crazy.patch --check".runCommand())
+        println("4")
         println("rm crazy.patch".runCommand())
 
     }
