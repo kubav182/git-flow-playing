@@ -250,6 +250,7 @@ tasks.register("hello") {
         //startRelease(VersionScope.MAJOR)
         //startRelease(VersionScope.MINOR)
         //startHotfix()
-        println("git diff-index HEAD".runCommand().isNullOrEmpty())
+        //println("git diff-index HEAD".runCommand().isNullOrEmpty())
+        println("git format-patch master --stdout | git apply --check -".runCommand())
     }
 }
