@@ -254,7 +254,7 @@ tasks.register("hello") {
 
         println("1")
         val patch = "git format-patch master --stdout".runCommand()
-        if (patch != null) {
+        if (patch.isNullOrBlank()) {
             File("crazy.patch").writeText(patch)
             println("2")
             println("git checkout master".runCommand())
