@@ -252,10 +252,19 @@ tasks.register("hello") {
         //startHotfix()
         //println("git diff-index HEAD".runCommand().isNullOrEmpty())
 
-        println("git format-patch master --stdout > crazy.patch".runCommand())
-        println("git checkout master".runCommand())
-        println("git apply crazy.patch --check".runCommand())
-        println("rm crazy.patch".runCommand())
+        println("1")
+        val patch = "git format-patch master --stdout".runCommand()
+        if (patch != null) {
+            File("crazy.patch").writeText(patch)
+            println("2")
+            println("git checkout master".runCommand())
+            println("3")
+            println("git apply crazy.patch --check".runCommand())
+            println("4")
+            //println("rm crazy.patch".runCommand())
+            println("5")
+            println("git checkout develop".runCommand())
+        }
 
     }
 }
