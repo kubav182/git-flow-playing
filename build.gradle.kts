@@ -1,4 +1,3 @@
-import java.util.*
 import java.io.*
 
 buildscript {
@@ -48,28 +47,6 @@ application {
     mainClassName = "git.flow.playing.App"
 }
 
-
-val versionPropertyFile = File(projectDir, "version.properties")
-val versionProps = Properties()
-versionProps.load(FileInputStream(versionPropertyFile))
-
-
-fun getMajorVersion(): String {
-    return versionProps.getProperty("app.version.major")
-}
-
-fun getMinorVersion(): String {
-    return versionProps.getProperty("app.version.minor")
-}
-
-fun getPatchVersion(): String {
-    return versionProps.getProperty("app.version.patch")
-}
-
-fun getStageVersion(): String {
-    return versionProps.getProperty("app.version.stage")
-}
-
 fun getGitBranchType(): GitBranchType {
     val currentBranch = getCurrentGitBranch()
     if (currentBranch == null) {
@@ -99,10 +76,6 @@ enum class GitBranchType(val prefix: String) {
     OTHER("")
 }
 
-enum class VersionScope {
-    MAJOR, MINOR, PATCH
-}
-
 enum class VersionStage {
     RELEASE, RC, SNAPSHOT
 }
@@ -130,48 +103,9 @@ fun hasUntrackedFiles(): Boolean {
     return "untracked".equals("git diff-index --quiet HEAD -- || echo 'untracked'".runCommand())
 }
 
-fun loadVersionProps() {
-    versionProps.load(FileInputStream(versionPropertyFile))
-}
-
-fun changeVersion(scope: VersionScope?, stage: VersionStage) {
-    when (scope) {
-        VersionScope.MAJOR -> {
-            versionProps["app.version.major"] = (versionProps.getProperty("app.version.major").toInt() + 1).toString()
-            versionProps["app.version.minor"] = "0"
-            versionProps["app.version.patch"] = "0"
-        }
-        VersionScope.MINOR -> {
-            versionProps["app.version.minor"] = (versionProps.getProperty("app.version.minor").toInt() + 1).toString()
-            versionProps["app.version.patch"] = "0"
-        }
-        VersionScope.PATCH -> versionProps["app.version.patch"] = (versionProps.getProperty("app.version.patch").toInt() + 1).toString()
-    }
-    when (stage) {
-        VersionStage.RELEASE -> versionProps["app.version.stage"] = "RELEASE"
-        VersionStage.RC -> versionProps["app.version.stage"] = "RC"
-        VersionStage.SNAPSHOT -> versionProps["app.version.stage"] = "SNAPSHOT"
-    }
-    versionProps.store(FileOutputStream(versionPropertyFile), null)
-    loadVersionProps()
-    project.version = currentVersionString()
-}
-
-fun currentVersionString(): String {
-    return (currentVersionWithoutStage()
-            + "." + versionProps.getProperty("app.version.stage"))
-}
-
-fun currentVersionWithoutStage(): String {
-    return (versionProps.getProperty("app.version.major")
-            + "." + versionProps.getProperty("app.version.minor")
-            + "." + versionProps.getProperty("app.version.patch"))
-}
-
 fun finishRelease() {
 
 }
-
 
 fun finishHotfix() {
 }
