@@ -168,74 +168,12 @@ fun currentVersionWithoutStage(): String {
             + "." + versionProps.getProperty("app.version.patch"))
 }
 
-fun startRelease(scope: VersionScope) {
-    val branchType = getGitBranchType()
-    if (hasUntrackedFiles()) {
-        throw IllegalStateException("Branch has untracked files")
-    }
-    if (branchType != GitBranchType.DEVELOP) {
-        "git checkout develop".runCommand()
-    }
-    if (scope == VersionScope.MAJOR) {
-        changeVersion(VersionScope.MAJOR, VersionStage.RC)
-    } else {
-        changeVersion(null, VersionStage.RC)
-    }
-    "git branch %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    "git checkout %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    "git push --set-upstream origin %s%s".format(GitBranchType.RELEASE.prefix, currentVersionWithoutStage()).runCommand()
-    pushVersionProperties()
-    "git checkout develop".runCommand()
-
-    changeVersion(VersionScope.MINOR, VersionStage.SNAPSHOT)
-    pushVersionProperties()
-}
-
-fun pushVersionProperties() {
-    "git add version.properties".runCommand()
-    "git commit -m version.json(%s)".format(currentVersionString()).runCommand()
-    "git push".runCommand()
-}
-
 fun finishRelease() {
 
 }
 
-fun startHotfix() {
-    val branchType = getGitBranchType()
-    if (hasUntrackedFiles()) {
-        throw IllegalStateException("Branch has untracked files")
-    }
-    if (branchType != GitBranchType.MASTER) {
-        "git checkout master".runCommand()
-    }
-    changeVersion(VersionScope.PATCH, VersionStage.RC)
-    "git branch %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
-    "git checkout %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
-    "git push --set-upstream origin %s%s".format(GitBranchType.HOTFIX.prefix, currentVersionWithoutStage()).runCommand()
-    pushVersionProperties()
-}
 
 fun finishHotfix() {
-    val branchType = getGitBranchType()
-    if (branchType != GitBranchType.HOTFIX) {
-        if (hasUntrackedFiles()) {
-            throw IllegalStateException("Branch has untracked files")
-        }
-
-    }
-}
-
-fun startFeature(featureName: String) {
-    val branchType = getGitBranchType()
-    if (branchType != GitBranchType.DEVELOP) {
-        if (hasUntrackedFiles()) {
-            throw IllegalStateException("Branch has untracked files")
-        }
-        "git checkout develop".runCommand()
-        "git checkout -b %s%s".format(GitBranchType.FEATURE.prefix, featureName).runCommand()
-        "git push".runCommand()
-    }
 }
 
 fun finishFeature() {
@@ -247,11 +185,6 @@ tasks.register("hello") {
     description = "Produces a greeting"
 
     doLast {
-        //startRelease(VersionScope.MAJOR)
-        //startRelease(VersionScope.MINOR)
-        //startHotfix()
-        //println("git diff-index HEAD".runCommand().isNullOrEmpty())
-
         println("1")
         val patch = "git format-patch master --stdout".runCommand()
         if (!patch.isNullOrBlank()) {
