@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.etherealscope:gradle-git-flow-version-plugin:1.0.0.RELEASE")
+        classpath("com.etherealscope:gradle-git-flow-version-plugin:1.6.0.RELEASE")
     }
 }
 
@@ -135,3 +135,74 @@ tasks.register("hello") {
 
     }
 }
+
+
+
+
+/*gitProperties {
+    customProperty("git.diff", x())
+}
+
+fun x() : String? {
+    val gitDiff = when(getGitBranchType()) {
+        GitBranchType.MASTER -> "No changes in master to master diff"
+        GitBranchType.RELEASE, GitBranchType.DEVELOP, GitBranchType.HOTFIX -> getGitDiff("master")
+        GitBranchType.FEATURE, GitBranchType.OTHER -> getGitDiff("develop")
+    }
+    println(gitDiff)
+    return gitDiff
+}
+
+fun getGitBranchType() : GitBranchType {
+    val currentBranch = getCurrentGitBranch()
+    if (currentBranch == null) {
+        return GitBranchType.OTHER
+    }
+    for (item in GitBranchType.values()) {
+        if (currentBranch.startsWith(item.prefix))
+            return item
+    }
+    return GitBranchType.OTHER
+}
+
+fun getCurrentGitBranch() : String? {
+    return "git rev-parse --abbrev-ref HEAD".runCommand()
+}
+
+fun getGitDiff(branch : String) : String? {
+    return "git log %s.. --oneline".format(branch).runCommand()
+}
+
+enum class GitBranchType (val prefix: String) {
+    MASTER("master"),
+    DEVELOP("develop"),
+    RELEASE("release/"),
+    FEATURE("feature/"),
+    HOTFIX("hotfix/"),
+    OTHER("")
+}
+
+enum class VersionScope {
+    MAJOR, MINOR, PATCH
+}
+
+enum class VersionStage {
+    RELEASE, RC, SNAPSHOT
+}
+
+fun String.runCommand(): String? {
+    try {
+        val parts = this.split("\\s".toRegex())
+        val proc = ProcessBuilder(*parts.toTypedArray())
+                .directory(File("./"))
+                .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.PIPE)
+                .start()
+
+        proc.waitFor(60, TimeUnit.MINUTES)
+        return proc.inputStream.bufferedReader().readText()
+    } catch (e: java.io.IOException) {
+        e.printStackTrace()
+        return null
+    }
+}*/
