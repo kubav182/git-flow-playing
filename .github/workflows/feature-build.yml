@@ -1,0 +1,28 @@
+name: Build feature and push docker image
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Get commit message
+        id: commitMessage
+        run: echo "::set-output name=COMMIT_MESSAGE::$(git log --no-merges -1 --oneline)"
+      - name: print cmsg
+        run: echo "${{ steps.commitMessage.outputs.COMMIT_MESSAGE }}"
+      - if: contains(steps.commitMessage.outputs.COMMIT_MESSAGE, '--push-docker') || contains(steps.commitMessage.outputs.COMMIT_MESSAGE, '--deploy-')
+        name: cmsg contains
+        run: echo "true for contains"
+      - if: contains(steps.commitMessage.outputs.COMMIT_MESSAGE, '--deploy-')
+        name: get env
+        run: echo "::set-env name=DEPLOY_ENV::$(echo ${{ steps.commitMessage.outputs.COMMIT_MESSAGE }} | sed -n 's/.*--deploy-\([test0|test1|test2|test3|test4|dev1|dev2|dev3|dev4|stage1|stage2|stage3|stage4]*\).*/\1/p')"
+      - name: print env
+        run: echo "${{ steps.commitMessage.outputs.DEPLOY_ENV }}"
