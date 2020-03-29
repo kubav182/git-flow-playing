@@ -13,6 +13,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
+      - name: run more cmds
+        id: gitOuts
+        run: |
+          echo "::set-output name=out1::$(echo 1)"
+          echo "::set-output name=out2::$(echo 2)"
+          echo "::set-output name=out3::$(echo 3)"
+      - name: prt
+        run: echo "${{ steps.gitOuts.outputs.out1 }} ${{ steps.gitOuts.outputs.out2 }} ${{ steps.gitOuts.outputs.out3 }}"
       - name: Get commit message1
         id: commitMessage
         run: echo "::set-output name=COMMIT_MESSAGE::$(git log --no-merges -1 --oneline)"
