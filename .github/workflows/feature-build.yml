@@ -26,3 +26,8 @@ jobs:
         run: echo "::set-env name=DEPLOY_ENV::$(echo '${{ steps.commitMessage.outputs.COMMIT_MESSAGE }}' | sed -n 's/.*--deploy-\([test0|test1|test2|test3|test4|dev1|dev2|dev3|dev4|stage1|stage2|stage3|stage4]*\).*/\1/p')"
       - name: print env
         run: echo "${{env.DEPLOY_ENV}}"
+      - name: read diff
+        id: diifId
+        run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
+      - name: print diff
+        run: echo "${{ steps.diifId.outputs.DIFF }}"
