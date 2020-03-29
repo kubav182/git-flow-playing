@@ -16,7 +16,7 @@ jobs:
       - name: run more cmds
         id: gitOuts
         run: |
-          git fetch origin master
+          git fetch origin master:master
           echo "::set-output name=out1::$(echo 1)"
           echo "::set-output name=out2::$(echo 2)"
           echo "::set-output name=out3::$(echo 3)"
