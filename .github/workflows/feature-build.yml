@@ -40,3 +40,7 @@ jobs:
         run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
       - name: print diff
         run: echo "${{ steps.diifId.outputs.DIFF }}"
+      - name: diffenv
+        run: echo "::set-env name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
+      - name: printdiffenv
+        run: echo "${{ env.DIFF }}"
