@@ -20,6 +20,11 @@ jobs:
           echo "::set-output name=out1::$(echo 1)"
           echo "::set-output name=out2::$(echo 2)"
           echo "::set-output name=out3::$(echo 3)"
+          diff=$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)
+          diff="${diff//'%'/'%25'}"
+          diff="${diff//$'\n'/'%0A'}"
+          diff="${diff//$'\r'/'%0D'}"
+          echo "::set-output name=diff::$diff"
       - name: prt
         run: echo "${{ steps.gitOuts.outputs.out1 }} ${{ steps.gitOuts.outputs.out2 }} ${{ steps.gitOuts.outputs.out3 }}"
       - name: Get commit message1
@@ -39,7 +44,7 @@ jobs:
         id: diifId
         run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
       - name: print diff
-        run: echo "${{ steps.diifId.outputs.DIFF }}"
+        run: echo "${{ steps.gitOuts.outputs.diff }}"
       - name: diffenv
         run: echo "::set-env name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
       - name: printdiffenv
