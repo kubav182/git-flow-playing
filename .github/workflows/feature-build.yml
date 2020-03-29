@@ -16,7 +16,7 @@ jobs:
       - name: run more cmds
         id: gitOuts
         run: |
-          git fetch origin/master
+          git fetch origin master
           echo "::set-output name=out1::$(echo 1)"
           echo "::set-output name=out2::$(echo 2)"
           echo "::set-output name=out3::$(echo 3)"
@@ -37,6 +37,6 @@ jobs:
         run: echo "${{env.DEPLOY_ENV}}"
       - name: read diff
         id: diifId
-        run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges origin/master..)"
+        run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
       - name: print diff
         run: echo "${{ steps.diifId.outputs.DIFF }}"
