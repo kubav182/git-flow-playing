@@ -13,7 +13,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 10
-        run: git fetch origin/master
       - name: run more cmds
         id: gitOuts
         run: |
@@ -37,6 +36,6 @@ jobs:
         run: echo "${{env.DEPLOY_ENV}}"
       - name: read diff
         id: diifId
-        run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges master..)"
+        run: echo "::set-output name=DIFF::$(git log --pretty=format:'%h%x09%an%x09%ai%x09%s' --no-merges origin/master..)"
       - name: print diff
         run: echo "${{ steps.diifId.outputs.DIFF }}"
