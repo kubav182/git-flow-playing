@@ -12,7 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 10
+        run: git fetch origin/master
       - name: run more cmds
         id: gitOuts
         run: |
