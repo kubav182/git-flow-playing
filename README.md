@@ -25,3 +25,9 @@ Dev process:
 - for hotfix go to master and run `gradle startHotfix`
 - merge hotfix to master and develop and release if present
 - after any merge to master tag master with vX.Y.Z
+
+DevOps:
+- build PR and integrate to github
+- create docker images and deploy features based on commit message
+- deploy develop, release, hotfix, master where it belongs
+- after deploy notify to slack channel deployments, app name, env, version, git diff (feature-develop, develop-master, release-master, hotfix-master)
